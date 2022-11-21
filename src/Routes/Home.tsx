@@ -55,6 +55,12 @@ const Box = styled(motion.div)<{bgPath: string}>`
   background-size: cover;
   background-position: center center;
   cursor: pointer;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 const rowVars = {
@@ -77,6 +83,7 @@ const boxVars = {
     y: -40,
     transition: {
       delay: 0.3,
+      duration: 0.2,
       type: "tween",
     },
   },
