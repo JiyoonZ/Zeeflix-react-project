@@ -1,12 +1,19 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Header from "./Components/Header";
+import Home from "./Routes/Home";
+import Search from "./Routes/Search";
+import Tv from "./Routes/Tv";
 
 function App() {
   return (
-    <div>
-      <h1>ZEEFLIX</h1>
-    </div>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/tv" element={<Home />} />
+        <Route path="/search" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

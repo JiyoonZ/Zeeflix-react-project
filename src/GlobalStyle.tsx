@@ -53,7 +53,7 @@ border-spacing: 0;
   box-sizing: border-box;
 }
 body {
-  font-weight: 300;
+  font-weight: 400;
   font-family: 'Source Sans Pro', sans-serif;
   color:black;
   line-height: 1.2;
