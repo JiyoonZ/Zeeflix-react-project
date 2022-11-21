@@ -5,6 +5,7 @@ import {makeImagePath} from "../utils";
 import {motion, AnimatePresence} from "framer-motion";
 import {useState} from "react";
 import {resourceLimits} from "worker_threads";
+import {useMatch, useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -15,7 +16,7 @@ const Loader = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Banner = styled.div<{bgPath: string}>`
+const Banner = styled.div<{bgpath: string}>`
   height: 100vh;
   /* background-color: red; */
   display: flex;
@@ -23,7 +24,7 @@ const Banner = styled.div<{bgPath: string}>`
   justify-content: center;
   padding: 60px;
   background-image: linear-gradient(rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPath});
+    url(${(props) => props.bgpath});
   background-size: cover;
 `;
 const Title = styled.h2`
@@ -47,11 +48,11 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{bgPath: string}>`
+const Box = styled(motion.div)<{bgpath: string}>`
   background-color: white;
   height: 200px;
   font-size: 40px;
-  background-image: url(${(props) => props.bgPath});
+  background-image: url(${(props) => props.bgpath});
   background-size: cover;
   background-position: center center;
   cursor: pointer;
@@ -114,6 +115,9 @@ const infoVars = {
 
 const offset = 6; //한슬라이드에 보여줄 영와의 갯수
 function Home() {
+  const navigate = useNavigate();
+  const bigMovieMatch = useMatch("/movies/:movieId");
+  console.log(bigMovieMatch);
   const {data, isLoading} = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -133,7 +137,9 @@ function Home() {
   };
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
+  };
   return (
     <Wrapper>
       {isLoading ? (
@@ -142,7 +148,7 @@ function Home() {
         <>
           <Banner
             onClick={increaseIndex}
-            bgPath={makeImagePath(data?.results[0].backdrop_path || "")}
+            bgpath={makeImagePath(data?.results[0].backdrop_path || "")}
           >
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
@@ -162,12 +168,16 @@ function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      layoutId={movie.id + ""}
                       variants={boxVars}
                       key={movie.id}
                       initial="normal"
                       whileHover="hover"
                       transition={{type: "tween"}}
-                      bgPath={makeImagePath(movie.backdrop_path, "w500")}
+                      bgpath={makeImagePath(movie.backdrop_path, "w500")}
+                      onClick={() => {
+                        onBoxClicked(movie.id);
+                      }}
                     >
                       <img></img>
                       <Info variants={infoVars}>
@@ -178,6 +188,23 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {bigMovieMatch && (
+              <motion.div
+                layoutId={bigMovieMatch.params.movieId}
+                style={{
+                  position: "absolute",
+                  width: "50vw",
+                  height: "80vh",
+                  backgroundColor: "red",
+                  top: 80,
+                  left: 0,
+                  right: 0,
+                  margin: "0 auto",
+                }}
+              ></motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
