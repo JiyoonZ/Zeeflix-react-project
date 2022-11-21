@@ -55,8 +55,9 @@ border-spacing: 0;
 body {
   font-weight: 400;
   font-family: 'Source Sans Pro', sans-serif;
-  color:black;
+  color:${(props) => props.theme.white.darker};
   line-height: 1.2;
+  background-color: black;
 }
 a {
   text-decoration: none;
