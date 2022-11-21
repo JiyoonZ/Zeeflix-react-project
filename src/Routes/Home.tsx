@@ -49,11 +49,12 @@ const Row = styled(motion.div)`
 
 const Box = styled(motion.div)<{bgPath: string}>`
   background-color: white;
-  height: 200px;
+  height: 20vh;
   font-size: 40px;
   background-image: url(${(props) => props.bgPath});
   background-size: cover;
   background-position: center center;
+  cursor: pointer;
 `;
 
 const rowVars = {
@@ -67,6 +68,20 @@ const rowVars = {
     x: -window.outerWidth - 5,
   },
 };
+const boxVars = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -40,
+    transition: {
+      delay: 0.3,
+      type: "tween",
+    },
+  },
+};
+
 const offset = 6; //한슬라이드에 보여줄 영와의 갯수
 function Home() {
   const {data, isLoading} = useQuery<IGetMoviesResult>(
@@ -117,11 +132,13 @@ function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      variants={boxVars}
                       key={movie.id}
+                      initial="normal"
+                      whileHover="hover"
+                      transition={{type: "tween"}}
                       bgPath={makeImagePath(movie.backdrop_path, "w500")}
-                    >
-                      {movie.title}
-                    </Box>
+                    ></Box>
                   ))}
               </Row>
             </AnimatePresence>
