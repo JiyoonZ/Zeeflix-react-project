@@ -84,6 +84,35 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
 `;
+const BigMovie = styled(motion.div)`
+  position: absolute;
+  width: 50vw;
+  height: 80vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: ${(props) => props.theme.black.lighter};
+  border-radius: 15px;
+  overflow: hidden;
+  color: ${(props) => props.theme.white.lighter};
+`;
+const BigCover = styled.div`
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  height: 400px;
+`;
+const BigTitle = styled.h3`
+  font-size: 35px;
+  padding: 30px;
+  position: relative;
+  top: -90px;
+`;
+const BigOverview = styled.p`
+  padding: 30px;
+  position: relative;
+  top: -110px;
+`;
 
 const rowVars = {
   hidden: {
@@ -152,6 +181,12 @@ function Home() {
   const onOverlayClick = () => {
     navigate("/");
   };
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find(
+      (movie) => movie.id + "" === bigMovieMatch.params.movieId
+    );
+  console.log(clickedMovie);
   return (
     <Wrapper>
       {isLoading ? (
@@ -208,21 +243,24 @@ function Home() {
                   animate={{opacity: 1}}
                   exit={{opacity: 0}}
                 />
-                <motion.div
+                <BigMovie
+                  style={{top: scrollY.get() + 100}}
                   layoutId={bigMovieMatch.params.movieId}
-                  style={{
-                    position: "absolute",
-                    width: "50vw",
-                    height: "80vh",
-                    backgroundColor: "red",
-                    top: scrollY.get() + 100,
-                    left: 0,
-                    right: 0,
-                    margin: "0 auto",
-                  }}
                 >
-                  HELLO
-                </motion.div>
+                  {clickedMovie && (
+                    <>
+                      <BigCover
+                        style={{
+                          backgroundImage: `linear-gradient(to top, black, transparent), url(
+                            ${makeImagePath(clickedMovie.backdrop_path, "w500")}
+                          )`,
+                        }}
+                      />
+                      <BigTitle>{clickedMovie.title}</BigTitle>
+                      <BigOverview>{clickedMovie.overview}</BigOverview>
+                    </>
+                  )}
+                </BigMovie>
               </>
             )}
           </AnimatePresence>
