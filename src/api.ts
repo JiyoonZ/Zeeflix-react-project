@@ -1,12 +1,13 @@
 const API_KEY = "0954a99f1d375b34ed91cf73343298cc";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
-interface IMovie {
+export interface IMovie {
   id: number;
   backdrop_path: string;
   poster_path: string;
   title: string;
   overview: string;
+  name?: string;
 }
 export interface IGetMoviesResult {
   dates: {
@@ -18,10 +19,16 @@ export interface IGetMoviesResult {
   total_pages: number;
   total_results: number;
 }
-export function getMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
-    (resp) => resp.json()
-  );
+export enum CategoryType {
+  "now_playing" = "now_playing",
+  "popular" = "popular",
+  "top_rated" = "top_rated",
+  "upcoming" = "upcoming",
+}
+export async function getMovies(category: CategoryType) {
+  return await fetch(
+    `${BASE_PATH}/movie/${category}?api_key=${API_KEY}&page=1&region=kr`
+  ).then((resp) => resp.json());
 }
 
 export function getSearch(keyword: string) {

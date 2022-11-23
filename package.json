@@ -1,5 +1,6 @@
 {
-  "name": "zeeflix",
+  "hompage": "https://jiyoonz.github.io/Zeeflix-react-project",
+  "name": "Zeeflix",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,28 +10,31 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.3",
+    "@types/node": "^16.11.62",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
-    "@types/styled-components": "^5.1.26",
-    "framer-motion": "^7.6.7",
+    "@types/react-helmet": "^6.1.5",
+    "framer-motion": "^7.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.39.5",
-    "react-router-dom": "^6.4.3",
+    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^1.3.0",
+    "react-hook-form": "^7.36.1",
+    "react-query": "^3.39.2",
+    "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
-    "recoil": "^0.7.6",
-    "styled-components": "^5.3.6",
-    "typescript": "^4.9.3",
+    "recoil": "^0.7.5",
+    "styled-components": "^5.3.5",
+    "typescript": "^4.8.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -51,7 +55,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.3.3",
+    "@types/styled-components": "^5.1.26",
     "gh-pages": "^4.0.0"
-  },
-  "homepage": "https://jiyoonz.github.io/Zeeflix-react-project"
+  }
 }
