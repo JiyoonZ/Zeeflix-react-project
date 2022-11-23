@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery} from "react-query";
 import styled from "styled-components";
 import {getMovies, IGetMoviesResult} from "../api";
 import {makeImagePath} from "../utils";
