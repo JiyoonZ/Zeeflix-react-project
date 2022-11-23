@@ -38,7 +38,9 @@ const Title = styled.h2`
 `;
 const Overview = styled.p`
   width: 50%;
-  font-size: 20px;
+  font-size: 1.5rem;
+  font-family: "Source Sans Pro";
+  font-weight: 300;
 `;
 
 function Home() {
@@ -59,6 +61,7 @@ function Home() {
           </Banner>
           <>
             <Slider category={CategoryType.now_playing} />
+            <Slider category={CategoryType.upcoming} />
             <Slider category={CategoryType.popular} />
             <Slider category={CategoryType.top_rated} />
           </>

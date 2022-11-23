@@ -37,7 +37,6 @@ const BigCover = styled.div`
   align-items: center;
   img {
     width: 20%;
-    border-radius: 10%;
   }
 `;
 const BigTitle = styled.h3`

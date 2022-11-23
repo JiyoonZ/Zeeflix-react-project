@@ -10,8 +10,8 @@ import DetailMovie from "./DetailMovie";
 
 const SliderContain = styled.div`
   position: relative;
-  top: -75px;
-  height: 210px;
+  top: -12rem;
+  height: 230px;
 `;
 
 const Row = styled(motion.div)`
@@ -234,7 +234,7 @@ function Slider({category}: ISliderProps) {
                   clickedMovie.backdrop_path,
                   "w500"
                 )}
-                mainPoster={makeImagePath(clickedMovie.poster_path, "w400")}
+                mainPoster={makeImagePath(clickedMovie.poster_path, "w200")}
                 back={`../`}
               />
             ) : null}
