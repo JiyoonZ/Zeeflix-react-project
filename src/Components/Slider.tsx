@@ -128,34 +128,37 @@ interface ISliderProps {
   category: CategoryType;
 }
 function Slider({category}: ISliderProps) {
-  // const apiName = `get${category}Movies`;
-
+  // react-query 문 작성
+  // 매개변수의 카테고리에 따라 호출하는 api 가 달라짐
   const {data, isLoading} = useQuery<IGetMoviesResult>(
     ["movies", category],
     () => getMovies(category)
   );
   const navigate = useNavigate();
   const {scrollY} = useScroll();
+  const [index, setIndex] = useState(0); // 페이지 번호 , index
+  const [leaving, setLeaving] = useState(false); // 슬라이드가 완전히 떠났는지 확인
+  const [reverse, setReverse] = useState(0); // 페이지 방향
+  const [showArrow, setShowArrow] = useState(false); // hover 했을때만 슬라이드 버튼 보이기
+  console.log(showArrow);
+
+  // 클릭한 박스의 url에 id 값으로 데이터 필터링하기
   const bigMovieMatch = useMatch(`/movies/${category}/:movieId`);
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
       (movie) => movie.id + "" === bigMovieMatch.params.movieId
     );
-
-  const [index, setIndex] = useState(0); // 페이지 번호 , index
-  const [leaving, setLeaving] = useState(false);
-  const [reverse, setReverse] = useState(0);
-  const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${category}/${movieId}`);
   };
+
+  const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const prevIndex = () => {
     if (data) {
       if (leaving) return;
       setReverse(-1);
-
       toggleLeaving();
       const totalMovies = data.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
@@ -166,7 +169,6 @@ function Slider({category}: ISliderProps) {
     if (data) {
       if (leaving) return;
       setReverse(1);
-
       toggleLeaving();
       const totalMovies = data.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
@@ -179,7 +181,14 @@ function Slider({category}: ISliderProps) {
         <h1>Loading...</h1>
       ) : (
         <>
-          <SliderContain>
+          <SliderContain
+            onMouseOver={() => {
+              setShowArrow(true);
+            }}
+            onMouseLeave={() => {
+              setShowArrow(false);
+            }}
+          >
             <CategoryTitle>
               {category.toUpperCase().replace("_", " ")}
             </CategoryTitle>
@@ -207,7 +216,10 @@ function Slider({category}: ISliderProps) {
                       whileHover="hover"
                       initial="normal"
                       transition={{type: "tween"}}
-                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+                      bgphoto={makeImagePath(
+                        movie.backdrop_path || movie.poster_path,
+                        "w500"
+                      )}
                       onClick={() => {
                         onBoxClicked(movie.id);
                       }}
@@ -219,14 +231,9 @@ function Slider({category}: ISliderProps) {
                   ))}
               </Row>
             </AnimatePresence>
-            <AnimatePresence>
-              <div
-                style={{
-                  backgroundColor: "white",
-                  width: "100%",
-                  height: "70%",
-                }}
-              >
+
+            {showArrow && (
+              <>
                 <Button isRight={false} onClick={prevIndex}>
                   <svg viewBox="0 0 32 32" aria-hidden="true">
                     <path d="M14.19 16.005l7.869 7.868-2.129 2.129-9.996-9.997L19.937 6.002l2.127 2.129z" />
@@ -237,8 +244,8 @@ function Slider({category}: ISliderProps) {
                     <path d="M18.629 15.997l-7.083-7.081L13.462 7l8.997 8.997L13.457 25l-1.916-1.916z" />
                   </svg>
                 </Button>
-              </div>
-            </AnimatePresence>
+              </>
+            )}
           </SliderContain>
           <AnimatePresence>
             {clickedMovie && (
@@ -247,7 +254,7 @@ function Slider({category}: ISliderProps) {
                 clickedMovie={clickedMovie}
                 scrollCenter={scrollY.get()}
                 bgMoviePoster={makeImagePath(
-                  clickedMovie.backdrop_path,
+                  clickedMovie.backdrop_path || clickedMovie.poster_path,
                   "w500"
                 )}
                 mainPoster={makeImagePath(clickedMovie.poster_path, "w200")}
