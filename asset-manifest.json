@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "https://jiyoonZ.github.io/Zeeflix-react-project/static/js/main.b5c4f408.js",
-    "index.html": "https://jiyoonZ.github.io/Zeeflix-react-project/index.html",
-    "main.b5c4f408.js.map": "https://jiyoonZ.github.io/Zeeflix-react-project/static/js/main.b5c4f408.js.map"
+    "main.js": "/Zeeflix-react-project/static/js/main.89981895.js",
+    "index.html": "/Zeeflix-react-project/index.html",
+    "main.89981895.js.map": "/Zeeflix-react-project/static/js/main.89981895.js.map"
   },
   "entrypoints": [
-    "static/js/main.b5c4f408.js"
+    "static/js/main.89981895.js"
   ]
 }
