@@ -98,7 +98,7 @@ function DetailMovie({
             <BigTitle>{clickedMovie.title || clickedMovie.name}</BigTitle>
             <BigOverview>
               {clickedMovie.overview === ""
-                ? "정보 없음"
+                ? "There is no Information!"
                 : clickedMovie.overview}
             </BigOverview>
           </>

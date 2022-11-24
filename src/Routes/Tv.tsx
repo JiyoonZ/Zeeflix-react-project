@@ -26,7 +26,7 @@ const Banner = styled.div<{bgpath: string}>`
   flex-direction: column;
   justify-content: center;
 
-  background-image: linear-gradient(rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 1)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 1)),
     url(${(props) => props.bgpath});
   background-size: cover;
 `;
@@ -45,9 +45,8 @@ const Overview = styled.p`
 
 function Tv() {
   // 현재 상영작 API
-  const {data, isLoading} = useQuery<IGetMoviesResult>(
-    ["tv", "nowPlaying"],
-    () => getTvShow(CategoryType.now_playing)
+  const {data, isLoading} = useQuery<IGetMoviesResult>(["tv", "popular"], () =>
+    getTvShow(CategoryType.popular)
   );
   return (
     <Wrapper>
