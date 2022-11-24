@@ -60,10 +60,10 @@ function Home() {
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <>
-            <Slider category={CategoryType.now_playing} />
-            <Slider category={CategoryType.upcoming} />
-            <Slider category={CategoryType.popular} />
-            <Slider category={CategoryType.top_rated} />
+            <Slider sortMenu={"movies"} category={CategoryType.now_playing} />
+            <Slider sortMenu={"movies"} category={CategoryType.upcoming} />
+            <Slider sortMenu={"movies"} category={CategoryType.popular} />
+            <Slider sortMenu={"movies"} category={CategoryType.top_rated} />
           </>
         </>
       )}

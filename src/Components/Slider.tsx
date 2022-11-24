@@ -5,7 +5,7 @@ import {useQuery} from "react-query";
 import {useState} from "react";
 import {useNavigate, useMatch, PathMatch} from "react-router-dom";
 import {useScroll, motion, AnimatePresence} from "framer-motion";
-import {CategoryType, getMovies, IGetMoviesResult} from "../api";
+import {CategoryType, getMovies, getTvShow, IGetMoviesResult} from "../api";
 import DetailMovie from "./DetailMovie";
 
 const SliderContain = styled.div`
@@ -126,31 +126,35 @@ const offset = 5;
 
 interface ISliderProps {
   category: CategoryType;
+  sortMenu: string;
 }
-function Slider({category}: ISliderProps) {
+function Slider({category, sortMenu}: ISliderProps) {
   // react-query 문 작성
   // 매개변수의 카테고리에 따라 호출하는 api 가 달라짐
   const {data, isLoading} = useQuery<IGetMoviesResult>(
-    ["movies", category],
-    () => getMovies(category)
+    [sortMenu, category],
+    () => {
+      return sortMenu === "movies" ? getMovies(category) : getTvShow(category);
+    }
   );
   const navigate = useNavigate();
   const {scrollY} = useScroll();
   const [index, setIndex] = useState(0); // 페이지 번호 , index
   const [leaving, setLeaving] = useState(false); // 슬라이드가 완전히 떠났는지 확인
   const [reverse, setReverse] = useState(0); // 페이지 방향
-  const [showArrow, setShowArrow] = useState(false); // hover 했을때만 슬라이드 버튼 보이기
-  console.log(showArrow);
+
+  // hover 할때마다 리렌더링 되는 불필요한 일같음.. 고민이 필요
+  // const [showArrow, setShowArrow] = useState(false); // hover 했을때만 슬라이드 버튼 보이기
 
   // 클릭한 박스의 url에 id 값으로 데이터 필터링하기
-  const bigMovieMatch = useMatch(`/movies/${category}/:movieId`);
+  const bigMovieMatch = useMatch(`/${sortMenu}/${category}/:movieId`);
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
       (movie) => movie.id + "" === bigMovieMatch.params.movieId
     );
   const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${category}/${movieId}`);
+    navigate(`/${sortMenu}/${category}/${movieId}`);
   };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
@@ -181,14 +185,7 @@ function Slider({category}: ISliderProps) {
         <h1>Loading...</h1>
       ) : (
         <>
-          <SliderContain
-            onMouseOver={() => {
-              setShowArrow(true);
-            }}
-            onMouseLeave={() => {
-              setShowArrow(false);
-            }}
-          >
+          <SliderContain>
             <CategoryTitle>
               {category.toUpperCase().replace("_", " ")}
             </CategoryTitle>
@@ -230,22 +227,17 @@ function Slider({category}: ISliderProps) {
                     </Box>
                   ))}
               </Row>
+              <Button isRight={false} onClick={prevIndex}>
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <path d="M14.19 16.005l7.869 7.868-2.129 2.129-9.996-9.997L19.937 6.002l2.127 2.129z" />
+                </svg>
+              </Button>
+              <Button isRight={true} onClick={nextIndex}>
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <path d="M18.629 15.997l-7.083-7.081L13.462 7l8.997 8.997L13.457 25l-1.916-1.916z" />
+                </svg>
+              </Button>
             </AnimatePresence>
-
-            {showArrow && (
-              <>
-                <Button isRight={false} onClick={prevIndex}>
-                  <svg viewBox="0 0 32 32" aria-hidden="true">
-                    <path d="M14.19 16.005l7.869 7.868-2.129 2.129-9.996-9.997L19.937 6.002l2.127 2.129z" />
-                  </svg>
-                </Button>
-                <Button isRight={true} onClick={nextIndex}>
-                  <svg viewBox="0 0 32 32" aria-hidden="true">
-                    <path d="M18.629 15.997l-7.083-7.081L13.462 7l8.997 8.997L13.457 25l-1.916-1.916z" />
-                  </svg>
-                </Button>
-              </>
-            )}
           </SliderContain>
           <AnimatePresence>
             {clickedMovie && (
@@ -258,7 +250,7 @@ function Slider({category}: ISliderProps) {
                   "w500"
                 )}
                 mainPoster={makeImagePath(clickedMovie.poster_path, "w200")}
-                back={`../`}
+                back={`/${sortMenu === "movies" ? "" : sortMenu}`}
               />
             )}
           </AnimatePresence>
