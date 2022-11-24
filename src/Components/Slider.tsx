@@ -11,7 +11,7 @@ import DetailMovie from "./DetailMovie";
 const SliderContain = styled.div`
   position: relative;
   top: -12rem;
-  height: 230px;
+  height: 250px;
 `;
 
 const Row = styled(motion.div)`
@@ -35,6 +35,7 @@ const Box = styled(motion.div)<{bgphoto: string}>`
   border-radius: 12px;
 
   cursor: pointer;
+  overflow: hidden;
   &:first-child {
     transform-origin: center left;
   }
@@ -43,26 +44,29 @@ const Box = styled(motion.div)<{bgphoto: string}>`
   }
 `;
 const Info = styled(motion.div)`
-  padding: 10px;
-  opacity: 0;
-  position: absolute;
   width: 100%;
+  padding: 8px;
+
+  position: absolute;
   bottom: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
+
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.6);
+
   h4 {
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 
-const Button = styled.div<{isNext: boolean}>`
+const Button = styled.div<{isRight: boolean}>`
   width: 40px;
   height: 40px;
 
   position: absolute;
   top: 100px;
-  right: ${(props) => (props.isNext ? 0 : null)};
-  left: ${(props) => (props.isNext ? null : 0)};
+  right: ${(props) => (props.isRight ? 0 : null)};
+  left: ${(props) => (props.isRight ? null : 0)};
   display: flex;
   place-items: center;
 
@@ -75,20 +79,20 @@ const Button = styled.div<{isNext: boolean}>`
     height: 50px;
   }
 `;
-const CategoryTitle = styled.div`
+const CategoryTitle = styled(motion.div)`
   font-size: 18px;
   font-weight: 500;
   padding: 0 0 15px 30px;
 `;
 const rowVariants = {
-  hidden: (clickPrev: boolean) => ({
-    x: clickPrev ? -window.innerWidth : window.innerWidth,
+  hidden: (reverse: boolean) => ({
+    x: reverse ? -window.innerWidth : window.innerWidth,
   }),
   visible: {
     x: 0,
   },
-  exit: (clickPrev: boolean) => ({
-    x: clickPrev ? window.innerWidth : -window.innerWidth,
+  exit: (reverse: boolean) => ({
+    x: reverse ? window.innerWidth : -window.innerWidth,
   }),
 };
 const boxVariants = {
@@ -98,7 +102,8 @@ const boxVariants = {
   hover: {
     scale: 1.3,
     zIndex: 99,
-    y: -30,
+    y: 10,
+    borderRadius: 0,
     transition: {
       delay: 0.2,
       duration: 0.2,
@@ -140,16 +145,16 @@ function Slider({category}: ISliderProps) {
 
   const [index, setIndex] = useState(0); // 페이지 번호 , index
   const [leaving, setLeaving] = useState(false);
-  const [clickPrev, setClickPrev] = useState(false);
+  const [reverse, setReverse] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${category}/${movieId}`);
   };
 
-  const decreaseIndex = () => {
+  const prevIndex = () => {
     if (data) {
       if (leaving) return;
-      setClickPrev(true);
+      setReverse(true);
 
       toggleLeaving();
       const totalMovies = data.results.length;
@@ -157,10 +162,10 @@ function Slider({category}: ISliderProps) {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
-  const increaseIndex = () => {
+  const nextIndex = () => {
     if (data) {
       if (leaving) return;
-      setClickPrev(false);
+      setReverse(false);
 
       toggleLeaving();
       const totalMovies = data.results.length;
@@ -168,19 +173,20 @@ function Slider({category}: ISliderProps) {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
-  console.log(bigMovieMatch?.params.movieId + "_" + category);
   return (
-    <div>
+    <>
       {isLoading ? (
         <h1>Loading...</h1>
       ) : (
         <>
           <SliderContain>
-            <CategoryTitle>{category}</CategoryTitle>
+            <CategoryTitle>
+              {category.toUpperCase().replace("_", " ")}
+            </CategoryTitle>
             <AnimatePresence
               initial={false}
               onExitComplete={toggleLeaving}
-              custom={clickPrev}
+              custom={reverse}
             >
               <Row
                 variants={rowVariants}
@@ -189,7 +195,7 @@ function Slider({category}: ISliderProps) {
                 exit="exit"
                 transition={{type: "tween", duration: 1}}
                 key={index}
-                custom={clickPrev}
+                custom={reverse}
               >
                 {data?.results
                   .slice(offset * index, offset * index + offset)
@@ -213,19 +219,29 @@ function Slider({category}: ISliderProps) {
                   ))}
               </Row>
             </AnimatePresence>
-            <Button isNext={false} onClick={decreaseIndex}>
-              <svg viewBox="0 0 32 32" aria-hidden="true">
-                <path d="M14.19 16.005l7.869 7.868-2.129 2.129-9.996-9.997L19.937 6.002l2.127 2.129z" />
-              </svg>
-            </Button>
-            <Button isNext={true} onClick={increaseIndex}>
-              <svg viewBox="0 0 32 32" aria-hidden="true">
-                <path d="M18.629 15.997l-7.083-7.081L13.462 7l8.997 8.997L13.457 25l-1.916-1.916z" />
-              </svg>
-            </Button>
+            <AnimatePresence>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  width: "100%",
+                  height: "70%",
+                }}
+              >
+                <Button isRight={false} onClick={prevIndex}>
+                  <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M14.19 16.005l7.869 7.868-2.129 2.129-9.996-9.997L19.937 6.002l2.127 2.129z" />
+                  </svg>
+                </Button>
+                <Button isRight={true} onClick={nextIndex}>
+                  <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M18.629 15.997l-7.083-7.081L13.462 7l8.997 8.997L13.457 25l-1.916-1.916z" />
+                  </svg>
+                </Button>
+              </div>
+            </AnimatePresence>
           </SliderContain>
           <AnimatePresence>
-            {clickedMovie ? (
+            {clickedMovie && (
               <DetailMovie
                 layoutId={bigMovieMatch.params.movieId + "_" + category}
                 clickedMovie={clickedMovie}
@@ -237,11 +253,11 @@ function Slider({category}: ISliderProps) {
                 mainPoster={makeImagePath(clickedMovie.poster_path, "w200")}
                 back={`../`}
               />
-            ) : null}
+            )}
           </AnimatePresence>
         </>
       )}
-    </div>
+    </>
   );
 }
 

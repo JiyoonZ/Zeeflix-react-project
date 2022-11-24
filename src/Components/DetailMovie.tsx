@@ -6,7 +6,7 @@ import {makeImagePath} from "../utils";
 
 const Overlay = styled(motion.div)`
   position: fixed;
-  z-index: 99;
+  z-index: 9999;
   top: 0;
   width: 100%;
   height: 100%;
@@ -25,7 +25,7 @@ const BigMovie = styled(motion.div)<{scrollCenter: number}>`
   border-radius: 15px;
   overflow: hidden;
   background-color: ${(props) => props.theme.black.darker};
-  z-index: 99;
+  z-index: 99999;
 `;
 const BigCover = styled.div`
   width: 100%;
