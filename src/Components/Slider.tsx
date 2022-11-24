@@ -85,14 +85,14 @@ const CategoryTitle = styled(motion.div)`
   padding: 0 0 15px 30px;
 `;
 const rowVariants = {
-  hidden: (reverse: boolean) => ({
-    x: reverse ? -window.innerWidth : window.innerWidth,
+  hidden: (reverse: number) => ({
+    x: reverse < 0 ? -window.innerWidth : window.innerWidth,
   }),
   visible: {
     x: 0,
   },
-  exit: (reverse: boolean) => ({
-    x: reverse ? window.innerWidth : -window.innerWidth,
+  exit: (reverse: number) => ({
+    x: reverse < 0 ? window.innerWidth : -window.innerWidth,
   }),
 };
 const boxVariants = {
@@ -145,7 +145,7 @@ function Slider({category}: ISliderProps) {
 
   const [index, setIndex] = useState(0); // 페이지 번호 , index
   const [leaving, setLeaving] = useState(false);
-  const [reverse, setReverse] = useState(false);
+  const [reverse, setReverse] = useState(0);
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${category}/${movieId}`);
@@ -154,7 +154,7 @@ function Slider({category}: ISliderProps) {
   const prevIndex = () => {
     if (data) {
       if (leaving) return;
-      setReverse(true);
+      setReverse(-1);
 
       toggleLeaving();
       const totalMovies = data.results.length;
@@ -165,7 +165,7 @@ function Slider({category}: ISliderProps) {
   const nextIndex = () => {
     if (data) {
       if (leaving) return;
-      setReverse(false);
+      setReverse(1);
 
       toggleLeaving();
       const totalMovies = data.results.length;
