@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {motion} from "framer-motion";
 import {IMovie} from "../api";
 import {useNavigate} from "react-router-dom";
-import {makeImagePath} from "../utils";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -13,10 +12,10 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.8);
   opacity: 0;
 `;
-const BigMovie = styled(motion.div)<{scrollCenter: number}>`
+const BigMovie = styled(motion.div)<{scrollcenter: number}>`
   position: fixed;
   width: 50vw;
-  /* top: ${(props) => props.scrollCenter + 100}px; */
+  /* top: ${(props) => props.scrollcenter + 100}px; */
   top: 90px;
   height: 80vh;
   left: 0;
@@ -59,7 +58,7 @@ interface IMovieDetail {
   layoutId: string;
   back: string;
   clickedMovie: IMovie;
-  scrollCenter: number;
+  scrollcenter: number;
   bgMoviePoster: string;
   mainPoster: string;
 }
@@ -68,7 +67,7 @@ function DetailMovie({
   layoutId,
   back,
   clickedMovie,
-  scrollCenter,
+  scrollcenter,
   bgMoviePoster,
   mainPoster,
 }: IMovieDetail) {
@@ -83,7 +82,7 @@ function DetailMovie({
         animate={{opacity: "1"}}
       />
       {clickedMovie && (
-        <BigMovie layoutId={layoutId} scrollCenter={scrollCenter}>
+        <BigMovie layoutId={layoutId} scrollcenter={scrollcenter}>
           <>
             <BigCover
               style={{

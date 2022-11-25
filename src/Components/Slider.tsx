@@ -3,7 +3,7 @@ import {makeImagePath} from "../utils";
 // import {getMovies, getTvs, IGetMoviesResult} from "../api";
 import {useQuery} from "react-query";
 import {useState} from "react";
-import {useNavigate, useMatch, PathMatch} from "react-router-dom";
+import {useNavigate, useMatch} from "react-router-dom";
 import {useScroll, motion, AnimatePresence} from "framer-motion";
 import {CategoryType, getMovies, getTvShow, IGetMoviesResult} from "../api";
 import DetailMovie from "./DetailMovie";

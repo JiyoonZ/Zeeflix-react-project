@@ -2,10 +2,6 @@ import {useQuery} from "react-query";
 import styled from "styled-components";
 import {CategoryType, getMovies, IGetMoviesResult} from "../api";
 import {makeImagePath} from "../utils";
-import {motion, AnimatePresence, useScroll} from "framer-motion";
-import {useState} from "react";
-import {resourceLimits} from "worker_threads";
-import {useMatch, useNavigate} from "react-router-dom";
 import Slider from "../Components/Slider";
 
 const Wrapper = styled.div`
