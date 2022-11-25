@@ -24,7 +24,7 @@ const Row = styled(motion.div)`
 `;
 
 const Box = styled(motion.div)<{bgphoto: string}>`
-  height: 160px;
+  height: 12rem;
 
   font-size: 60px;
   position: relative;
@@ -222,7 +222,7 @@ function Slider({category, sortMenu}: ISliderProps) {
                       }}
                     >
                       <Info variants={infoVariants}>
-                        <h4>{movie.title}</h4>
+                        <h4>{movie.title || movie.name}</h4>
                       </Info>
                     </Box>
                   ))}

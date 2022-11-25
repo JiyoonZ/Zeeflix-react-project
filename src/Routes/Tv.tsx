@@ -55,7 +55,7 @@ function Tv() {
       ) : (
         <>
           <Banner bgpath={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
+            <Title>{data?.results[0].name}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <>

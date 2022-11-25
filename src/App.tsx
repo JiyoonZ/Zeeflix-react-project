@@ -1,3 +1,4 @@
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,18 +12,20 @@ import Tv from "./Routes/Tv";
 
 function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
-      <Header />
-      <Routes>
-        <Route path="/tv" element={<Tv />}>
-          <Route path="/tv/:category/:moiveId" element={<Tv />} />
-        </Route>
-        <Route path="/search" element={<Search />} />
-        <Route path="/" element={<Home />}>
-          <Route path="/movies/:category/:movieId" element={<Home />} />
-        </Route>
-      </Routes>
-    </Router>
+    <React.StrictMode>
+      <Router basename={process.env.PUBLIC_URL}>
+        <Header />
+        <Routes>
+          <Route path="/tv" element={<Tv />}>
+            <Route path="/tv/:category/:moiveId" element={<Tv />} />
+          </Route>
+          <Route path="/search" element={<Search />} />
+          <Route path="/" element={<Home />}>
+            <Route path="/movies/:category/:movieId" element={<Home />} />
+          </Route>
+        </Routes>
+      </Router>
+    </React.StrictMode>
   );
 }
 
