@@ -1,6 +1,7 @@
 const API_KEY = "0954a99f1d375b34ed91cf73343298cc";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
+// 영화, tv show 1개의  데이터 구조 (tv show에는 name)
 export interface IMovie {
   id: number;
   backdrop_path: string;
@@ -41,5 +42,19 @@ export async function getTvShow(tvCategory: CategoryType) {
       : tvCategory;
   return await fetch(
     `${BASE_PATH}/tv/${categoryValue}?api_key=${API_KEY}&language=en-US&page=1`
+  ).then((resp) => resp.json());
+}
+
+// 검색결과 data의 형식
+export interface IGetSearchResults {
+  page: number;
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+}
+// 검색결과 api
+export async function getMoviesByKeyword(keyword: string) {
+  return await fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=en-US&query=${keyword}&page=1&region=kr`
   ).then((resp) => resp.json());
 }

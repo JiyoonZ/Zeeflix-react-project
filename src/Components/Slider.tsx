@@ -244,7 +244,7 @@ function Slider({category, sortMenu}: ISliderProps) {
               <DetailMovie
                 layoutId={bigMovieMatch.params.movieId + "_" + category}
                 clickedMovie={clickedMovie}
-                scrollCenter={scrollY.get()}
+                scrollcenter={scrollY.get()}
                 bgMoviePoster={makeImagePath(
                   clickedMovie.backdrop_path || clickedMovie.poster_path,
                   "w500"
