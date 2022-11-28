@@ -89,7 +89,7 @@ function Search() {
     isLoading: isMovieDataLoading,
     refetch,
   } = useQuery<IGetSearchResults>(
-    ["search Moive"],
+    ["search Moive", keyword],
     () => getMoviesByKeyword(String(keyword)),
     {
       select: (data) => {
@@ -106,7 +106,7 @@ function Search() {
   );
   useEffect(() => {
     refetch();
-  }, [keyword, search]);
+  }, [keyword]);
   const onBoxClicked = (movieId: string) => {
     navigate(`/search/${movieId}?keyword=${keyword}`);
   };
@@ -127,7 +127,7 @@ function Search() {
         <>
           <MenuTitle>Movie Results</MenuTitle>
           <ResultsBox>
-            {movieData?.results.map((movie) => (
+            {movieData?.results.slice(0, 18).map((movie) => (
               <Box
                 onClick={() => onBoxClicked(movie.id + "")}
                 bgpath={makeImagePath(movie.backdrop_path, "w300")}
