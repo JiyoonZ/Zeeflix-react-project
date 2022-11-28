@@ -42,8 +42,8 @@ function Loading() {
         animate="active"
         initial="normal"
         transition={{
-          default: {duration: 3},
-          fillOpacity: {duration: 1.5, delay: 1.2},
+          default: {duration: 1},
+          fillOpacity: {duration: 1, delay: 0.4},
         }}
         xmlns="http://www.w3.org/2000/svg"
         width="1024"
