@@ -7,18 +7,18 @@ import Search from "./Routes/Search";
 import Tv from "./Routes/Tv";
 
 function App() {
-  const [isFirst, setIsFirst] = useState(false);
-  useEffect(() => {
-    setIsFirst(true);
-    setTimeout(() => {
-      setIsFirst(false);
-    }, 3600);
-  }, []);
+  // const [isFirst, setIsFirst] = useState(false);
+  // useEffect(() => {
+  //   setIsFirst(true);
+  //   setTimeout(() => {
+  //     setIsFirst(false);
+  //   }, 3600);
+  // }, []);
   return (
     <React.StrictMode>
       <Router basename={process.env.PUBLIC_URL}>
-        {isFirst && <Loading />}
-        {!isFirst && <Header />}
+        {/* <Loading /> */}
+        <Header />
         <Routes>
           <Route path="/tv" element={<Tv />}>
             <Route path="/tv/:category/:moiveId" element={<Tv />} />

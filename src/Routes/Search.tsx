@@ -42,6 +42,15 @@ const MenuTitle = styled.h1`
   font-weight: 300;
   padding: 15px 0;
 `;
+const EmptyResult = styled.div`
+  font-size: 30px;
+  font-weight: lighter;
+  width: 100%;
+  height: 50vh;
+  text-align: center;
+  padding: 25vh 0;
+  color: rgba(255, 255, 255, 0.4);
+`;
 const Info = styled(motion.div)`
   width: 100%;
 
@@ -116,18 +125,18 @@ function Search() {
     movieData?.results.find(
       (movie) => movie.id + "" === bigMovieMatch.params.movieId
     );
-
+  console.log(movieData?.results);
   return (
     <Wrapper>
       <SubTitle>
         <span style={{fontSize: "30px"}}>Search results for</span> "
         {keyword?.toLocaleLowerCase()}".
       </SubTitle>
-      {!isMovieDataLoading && (
+      {!isMovieDataLoading && movieData?.results.length ? (
         <>
           <MenuTitle>Movie Results</MenuTitle>
           <ResultsBox>
-            {movieData?.results.slice(0, 18).map((movie) => (
+            {movieData?.results.slice(0, 12).map((movie) => (
               <Box
                 onClick={() => onBoxClicked(movie.id + "")}
                 bgpath={makeImagePath(movie.backdrop_path, "w300")}
@@ -160,6 +169,8 @@ function Search() {
             )}
           </AnimatePresence>
         </>
+      ) : (
+        <EmptyResult>Sorry! No result found :(</EmptyResult>
       )}
     </Wrapper>
   );
