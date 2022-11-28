@@ -1,9 +1,11 @@
 import {useEffect} from "react";
 import {useQuery} from "react-query";
-import {useLocation} from "react-router-dom";
+import {useLocation, useMatch, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {getMoviesByKeyword, IGetSearchResults} from "../api";
 import {makeImagePath} from "../utils";
+import {motion, AnimatePresence} from "framer-motion";
+import DetailMovie from "../Components/DetailMovie";
 
 const Wrapper = styled.div`
   padding: 50px;
@@ -12,32 +14,79 @@ const Wrapper = styled.div`
 `;
 const SubTitle = styled.h1`
   font-size: 40px;
+  margin: 20px 0;
 `;
 const ResultsBox = styled.div`
-  margin-top: 30px;
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  border: 1px solid white;
+  grid-template-columns: repeat(6, 1fr);
+  /* border: 1px solid white; */
   gap: 10px;
+  row-gap: 25px;
 `;
-const Box = styled.div<{bgpath: string}>`
+const Box = styled(motion.div)<{bgpath: string}>`
   width: 100%;
   height: 200px;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   background-image: url(${(props) => props.bgpath});
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
+
+  position: relative;
+  cursor: pointer;
 `;
+const MenuTitle = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
+  padding: 15px 0;
+`;
+const Info = styled(motion.div)`
+  width: 100%;
+
+  position: absolute;
+  bottom: 0;
+  padding: 8px;
+
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.6);
+  text-align: center;
+`;
+const BoxVars = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    zIndex: 99,
+    y: 5,
+    borderRadius: 0,
+    transition: {
+      duration: 0.2,
+      type: "tween",
+    },
+  },
+};
+const infoVars = {
+  hover: {
+    opacity: 1,
+  },
+  transition: {
+    duration: 0.2,
+    type: "tween",
+  },
+};
 
 function Search() {
   const {search} = useLocation();
   const keyword = new URLSearchParams(search).get("keyword");
+  const navigate = useNavigate();
+
   // select => 아무런 poster 정보마저 없는 영화는 제외하기 위해서 사용
   const {
     data: movieData,
-    isLoading: isMovieData,
+    isLoading: isMovieDataLoading,
     refetch,
   } = useQuery<IGetSearchResults>(
     ["search Moive"],
@@ -55,22 +104,63 @@ function Search() {
       },
     }
   );
-  console.log(movieData);
   useEffect(() => {
     refetch();
-  }, [keyword]);
+  }, [keyword, search]);
+  const onBoxClicked = (movieId: string) => {
+    navigate(`/search/${movieId}?keyword=${keyword}`);
+  };
+  const bigMovieMatch = useMatch(`/search/:movieId`);
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    movieData?.results.find(
+      (movie) => movie.id + "" === bigMovieMatch.params.movieId
+    );
+
   return (
     <Wrapper>
       <SubTitle>
-        "{keyword?.toLocaleLowerCase()}"에 대한 검색결과입니다.
+        <span style={{fontSize: "30px"}}>Search results for</span> "
+        {keyword?.toLocaleLowerCase()}".
       </SubTitle>
-      <ResultsBox>
-        {movieData?.results.map((movie) => (
-          <Box bgpath={makeImagePath(movie.backdrop_path, "w300")}>
-            <h1>{movie?.title}</h1>
-          </Box>
-        ))}
-      </ResultsBox>
+      {!isMovieDataLoading && (
+        <>
+          <MenuTitle>Movie Results</MenuTitle>
+          <ResultsBox>
+            {movieData?.results.map((movie) => (
+              <Box
+                onClick={() => onBoxClicked(movie.id + "")}
+                bgpath={makeImagePath(movie.backdrop_path, "w300")}
+                variants={BoxVars}
+                whileHover="hover"
+                initial="normal"
+                transition={{type: "tween"}}
+                key={movie.id}
+                layoutId={movie.id + "_" + keyword}
+              >
+                <Info variants={infoVars}>
+                  <h1>{movie?.title}</h1>
+                </Info>
+              </Box>
+            ))}
+          </ResultsBox>
+          <AnimatePresence>
+            {clickedMovie && (
+              <DetailMovie
+                layoutId={clickedMovie.id + "_" + keyword}
+                back={`/search?keyword=${keyword}`}
+                clickedMovie={clickedMovie}
+                scrollcenter={0}
+                bgMoviePoster={makeImagePath(
+                  clickedMovie.backdrop_path || clickedMovie.poster_path,
+                  "w500"
+                )}
+                mainPoster={makeImagePath(clickedMovie.poster_path, "w200")}
+              />
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </Wrapper>
   );
 }
