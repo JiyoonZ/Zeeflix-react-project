@@ -9,6 +9,8 @@ export interface IMovie {
   title: string;
   overview: string;
   name?: string;
+  vote_average: number;
+  adult: boolean;
 }
 export interface IGetMoviesResult {
   dates: {
