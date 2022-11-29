@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/Zeeflix-react-project/static/js/main.0345e4b1.js",
+    "main.js": "/Zeeflix-react-project/static/js/main.41a48d5c.js",
     "index.html": "/Zeeflix-react-project/index.html",
-    "main.0345e4b1.js.map": "/Zeeflix-react-project/static/js/main.0345e4b1.js.map"
+    "main.41a48d5c.js.map": "/Zeeflix-react-project/static/js/main.41a48d5c.js.map"
   },
   "entrypoints": [
-    "static/js/main.0345e4b1.js"
+    "static/js/main.41a48d5c.js"
   ]
 }
