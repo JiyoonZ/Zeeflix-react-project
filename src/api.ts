@@ -60,3 +60,9 @@ export async function getMoviesByKeyword(keyword: string) {
     `${BASE_PATH}/search/movie?api_key=${API_KEY}&language=en-US&query=${keyword}&page=1&region=kr`
   ).then((resp) => resp.json());
 }
+
+export async function getTvShowByKeyword(keyword: string) {
+  return await fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&language=en-US&query=${keyword}&page=1`
+  ).then((resp) => resp.json());
+}

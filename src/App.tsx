@@ -18,19 +18,23 @@ function App() {
     <React.StrictMode>
       <Router basename={process.env.PUBLIC_URL}>
         {isFirst && <Loading />}
-        <Header />
-        <Routes>
-          <Route path="/tv" element={<Tv />}>
-            <Route path="/tv/:category/:moiveId" element={<Tv />} />
-          </Route>
-          <Route path="/search" element={<Search />}>
-            <Route path="/search/:movieId" element={<Search />} />
-          </Route>
-          <Route path="/" element={<Home />}>
-            <Route path="/movies/:category/:movieId" element={<Home />} />
-          </Route>
-          <Route path="/loading" element={<Loading />} />
-        </Routes>
+        {!isFirst && (
+          <>
+            <Header />
+            <Routes>
+              <Route path="/tv" element={<Tv />}>
+                <Route path="/tv/:category/:moiveId" element={<Tv />} />
+              </Route>
+              <Route path="/search" element={<Search />}>
+                <Route path="/search/:movieId" element={<Search />} />
+              </Route>
+              <Route path="/" element={<Home />}>
+                <Route path="/movies/:category/:movieId" element={<Home />} />
+              </Route>
+              <Route path="/loading" element={<Loading />} />
+            </Routes>
+          </>
+        )}
       </Router>
     </React.StrictMode>
   );

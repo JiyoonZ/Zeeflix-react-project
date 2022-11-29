@@ -122,7 +122,7 @@ function DetailMovie({
 }: IMovieDetail) {
   const navigate = useNavigate();
   const onOverlayClicked = () => navigate(back);
-  console.log(clickedMovie);
+
   return (
     <>
       <Overlay
